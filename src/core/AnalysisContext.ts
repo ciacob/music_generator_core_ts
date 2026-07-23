@@ -1,0 +1,51 @@
+import type { IAnalysisContext } from './interfaces/IAnalysisContext.js';
+import type { IMusicUnit } from './interfaces/IMusicUnit.js';
+
+/**
+ * Default implementation of `IAnalysisContext`.
+ *
+ * Ported from
+ * `as-sources/legacy-generators-core-library/ro/se/legacy/generators/core/AnalysisContext.as`.
+ *
+ * The AS3 original leaves its fields uninitialized (`null` until
+ * explicitly set); here they default to an empty array / `0` instead, so
+ * `previousContent`/`proposedContent` are always safely iterable and
+ * `toString()` never has to guard against a `null` join target. A minor,
+ * low-risk divergence for a plain data holder, not a behavior-changing
+ * one for any real generation logic (which always sets these explicitly
+ * before reading them).
+ */
+export class AnalysisContext implements IAnalysisContext {
+  private previousContentValue: IMusicUnit[] = [];
+  private proposedContentValue: unknown[] = [];
+  private percentTimeValue = 0;
+
+  get previousContent(): IMusicUnit[] {
+    return this.previousContentValue;
+  }
+
+  set previousContent(value: IMusicUnit[]) {
+    this.previousContentValue = value;
+  }
+
+  get proposedContent(): unknown[] {
+    return this.proposedContentValue;
+  }
+
+  set proposedContent(value: unknown[]) {
+    this.proposedContentValue = value;
+  }
+
+  get percentTime(): number {
+    return this.percentTimeValue;
+  }
+
+  set percentTime(value: number) {
+    this.percentTimeValue = value;
+  }
+
+  /** Produces a string rendition of the current instance. Useful for debugging. */
+  toString(): string {
+    return `[AnalysisContext: percentTime: ${this.percentTimeValue} | previousContent: ${this.previousContentValue.join(', ')}]`;
+  }
+}
