@@ -25,17 +25,22 @@ function combineRGB(red: number, green: number, blue: number): number {
 /**
  * Generates a random, unique 24-bit color (alpha channel not included).
  *
- * N.B.: ported verbatim, including a bug present in the original AS3:
- * the per-channel `red/green/blueLowerLimit`/`red/green/blueHigherLimit`
- * parameters are unconditionally overwritten with `lowerLimit`/
- * `higherLimit` before use (`redLowerLimit = Math.max(lowerLimit, 0)`
- * rather than `Math.max(redLowerLimit, 0)`, and so on for all six),
- * meaning the per-channel limits never actually take effect — only the
- * generic `lowerLimit`/`higherLimit` do. This is a faithful translation
- * of the engine's actual behavior; the only two call sites in the engine
- * invoke this with no arguments at all, so the bug has no practical
- * effect there, but it's flagged here rather than silently "fixed" per
- * this project's convention of preserving original behavior.
+ * N.B.: this fixes a bug present in the original AS3 source, so it is
+ * *not* a byte-for-byte behavioral port — flagged here since it deviates
+ * from this project's usual "preserve original behavior" convention. In
+ * the original, the per-channel `red/green/blueLowerLimit`/
+ * `red/green/blueHigherLimit` parameters were unconditionally overwritten
+ * with `lowerLimit`/`higherLimit` before use (`redLowerLimit =
+ * Math.max(lowerLimit, 0)` rather than `Math.max(redLowerLimit, 0)`, and
+ * so on for all six), so any explicit per-channel limit a caller passed
+ * was silently discarded — even though the ASDoc explicitly says each one
+ * "takes precedence over" the generic limit. This port clamps each
+ * per-channel limit against its own bound instead, restoring the
+ * documented "takes precedence" behavior. This has zero effect on the
+ * engine's only two call sites (both call this with no arguments, so
+ * every per-channel limit is `0` — treated as "not provided" — either
+ * way), but it does mean a future caller that actually passes per-channel
+ * limits will get the documented behavior rather than the original bug.
  *
  * @param pool Optional; an array to populate with colors already
  * generated, to avoid repeating colors. If `null` (the default), nothing
@@ -44,13 +49,14 @@ function combineRGB(red: number, green: number, blue: number): number {
  * blue channels can take values smaller than this limit.
  * @param higherLimit Optional; if provided, none of the red, green, and
  * blue channels can take values greater than this limit.
- * @param redLowerLimit See the note above: has no effect in the original
- * engine behavior, preserved here for fidelity.
- * @param redHigherLimit See the note above.
- * @param greenLowerLimit See the note above.
- * @param greenHigherLimit See the note above.
- * @param blueLowerLimit See the note above.
- * @param blueHigherLimit See the note above.
+ * @param redLowerLimit Optional; same as `lowerLimit`, but for the red
+ * channel. Takes precedence over `lowerLimit`, which is generic.
+ * @param redHigherLimit Optional; same as `higherLimit`, but for the red
+ * channel. Takes precedence over `higherLimit`, which is generic.
+ * @param greenLowerLimit Optional; same as `redLowerLimit`, for the green channel.
+ * @param greenHigherLimit Optional; same as `redHigherLimit`, for the green channel.
+ * @param blueLowerLimit Optional; same as `redLowerLimit`, for the blue channel.
+ * @param blueHigherLimit Optional; same as `redHigherLimit`, for the blue channel.
  * @param randomFn A function producing a random floating point value in
  * `[0, 1)`. Optional, defaults to `Math.random`. Not present in the
  * original AS3 signature; threaded through to `NumberUtil.getRandomInteger`
@@ -70,16 +76,14 @@ export function generateRandomColor(
   randomFn: () => number = Math.random,
 ): number {
   const effectiveLower = Math.max(lowerLimit, 0);
-  // Preserving the original's overwrite-with-generic-limit behavior; see
-  // the "N.B." above.
-  redLowerLimit = effectiveLower;
-  greenLowerLimit = effectiveLower;
-  blueLowerLimit = effectiveLower;
+  redLowerLimit = Math.max(redLowerLimit, 0);
+  greenLowerLimit = Math.max(greenLowerLimit, 0);
+  blueLowerLimit = Math.max(blueLowerLimit, 0);
 
   const effectiveHigher = Math.min(higherLimit, 0xff);
-  redHigherLimit = effectiveHigher;
-  greenHigherLimit = effectiveHigher;
-  blueHigherLimit = effectiveHigher;
+  redHigherLimit = Math.min(redHigherLimit, 0xff);
+  greenHigherLimit = Math.min(greenHigherLimit, 0xff);
+  blueHigherLimit = Math.min(blueHigherLimit, 0xff);
 
   const doGenerate = (
     lower = 0,

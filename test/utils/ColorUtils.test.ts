@@ -29,6 +29,16 @@ describe('generateRandomColor', () => {
     expect(color).toBe(0x808080);
   });
 
+  it('lets an explicit per-channel limit take precedence over the generic one', () => {
+    // Generic range is wide open [0, 0xff], but the red channel is
+    // pinned to exactly 0x40 via redLowerLimit/redHigherLimit. Before the
+    // fix, these per-channel values were silently discarded and the red
+    // channel would have used the generic [0, 0xff] range instead.
+    const color = generateRandomColor(null, 0, 0xff, 0x40, 0x40, 0, 0, 0, 0, () => 0.999);
+    const red = (color >> 16) & 0xff;
+    expect(red).toBe(0x40);
+  });
+
   it('appends the generated color to the given pool and avoids repeats already in it', () => {
     const pool: number[] = [0x000000];
     // RNG sequence: first call would collide with the pre-seeded pool
