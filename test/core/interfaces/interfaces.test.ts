@@ -115,13 +115,13 @@ describe('IParametersList / IParameter are implementable', () => {
 });
 
 describe('IGeneratorModule is implementable, including its write-only callback', () => {
-  it('accepts a minimal implementation and allows setting (but not reading) callback', () => {
+  it('accepts a minimal implementation and allows setting (but not reading) callback', async () => {
     let receivedPercent = -1;
 
     class MinimalGenerator implements IGeneratorModule {
       private notifyFn: GenerationCallback | undefined;
 
-      generate(_request: IMusicRequest): void {
+      async generate(_request: IMusicRequest): Promise<void> {
         this.notifyFn?.({ state: 'in progress', percentComplete: 1, error: null });
       }
       abort(): void {
@@ -154,7 +154,7 @@ describe('IGeneratorModule is implementable, including its write-only callback',
     generator.callback = (status) => {
       receivedPercent = status.percentComplete;
     };
-    generator.generate({} as IMusicRequest);
+    await generator.generate({} as IMusicRequest);
 
     expect(receivedPercent).toBe(1);
     expect(generator.moduleUid).toBe('minimal-generator');

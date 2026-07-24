@@ -35,13 +35,22 @@ export type GenerationCallback = (status: GenerationStatus) => void;
  * declared, no getter) — expressed here via a `set`-only interface
  * accessor, same pattern used for `ITimeSignatureEntry.signature` in
  * step 4.
+ *
+ * `generate` returns `Promise<void>` here, not `void`: the AS3 original
+ * ran generation as a callback-driven pseudo-thread (via a Timer-based
+ * `_executeAsyncWhile` loop), chunking work and yielding on a delay to
+ * keep Flash's single UI thread responsive. A Node/browser library has
+ * no such UI thread to protect, and `generate()`'s actual async nature —
+ * status updates arrive via `callback` regardless — is better expressed
+ * as a real `async` function the caller can `await`, yielding to the
+ * event loop between iterations instead of running on a real timer delay.
  */
 export interface IGeneratorModule {
   /**
    * Begins the generation process. The process is asynchronous.
    * @param request Describes the music that needs to be created.
    */
-  generate(request: IMusicRequest): void;
+  generate(request: IMusicRequest): Promise<void>;
 
   /** Stops the in-progress generation and discards any (raw) music already created. */
   abort(): void;
