@@ -132,7 +132,9 @@ function computeProgressionScoreRef(
     const biasTable = pitchesA.length > anchor - 2 ? external : internal;
     const pitchA = pitchesA.shift() as number;
     const pitchB = pitchesB.shift() as number;
-    const melodicInterval = Math.abs(pitchA - pitchB);
+    // BUG FIX applied here too (see ChordProgression.ts's file header): reduced to a simple
+    // interval before the lookup, so this reference stays in sync with the real, fixed code.
+    const melodicInterval = Math.abs(pitchA - pitchB) % IntervalsSize.PERFECT_OCTAVE;
     const localBias = (biasTable[melodicInterval] as number) * biasFactor;
     totalBias += localBias;
     pitchesA.reverse();
@@ -312,6 +314,53 @@ describe('ChordProgression', () => {
       for (const [prev, curr] of cases) {
         expect(realScoreFor(prev, curr, RESTLESSNESS)).toBeGreaterThanOrEqual(1);
       }
+    });
+  });
+
+  describe('melodicInterval bug fix regression guard (out-of-range bias-table index)', () => {
+    it('does not throw when a matched voice leaps more than an octave between chords', () => {
+      // Reproduces the exact crash found by the end-to-end integration test: prevPitches[0]=30
+      // and currPitches[0]=90 are 60 semitones apart (5 octaves) -- with the bug, this indexed
+      // biasTable[60] (undefined, since the table only covers 0-12), producing a NaN score that
+      // AnalysisScores.add's own validation rejects, throwing.
+      expect(() => realScoreFor([30, 40], [90, 95], RESTLESSNESS)).not.toThrow();
+    });
+
+    it('produces a finite, in-range score (not NaN) for a >1 octave leap', () => {
+      const score = realScoreFor([30, 40], [90, 95], RESTLESSNESS);
+      expect(Number.isNaN(score)).toBe(false);
+      expect(score).toBeGreaterThanOrEqual(1);
+      expect(score).toBeLessThanOrEqual(100);
+    });
+
+    it('matches the fully-fixed reference for a >1 octave leap scenario', () => {
+      const prev = [30, 40];
+      const curr = [90, 95]; // both voices leap exactly 60 semitones (5 octaves) up
+      const expected = fullScoreRef(prev, curr, RESTLESSNESS, 'fixed', 'fixed');
+      expect(realScoreFor(prev, curr, RESTLESSNESS)).toBe(expected);
+    });
+
+    it('a compound leap scores identically to its simple-interval equivalent (e.g. a 10th behaves like a 3rd)', () => {
+      // prev->curr leap of exactly 15 semitones (a compound minor third, i.e. a tenth) must
+      // score the same as a leap of 3 semitones (15 % 12 = 3, a plain minor third) -- proving
+      // the fix reduces to a genuine simple interval, not just "avoids crashing".
+      const prevCompound = [40];
+      const currCompound = [55]; // 15 semitones up
+      const prevSimple = [40];
+      const currSimple = [43]; // 3 semitones up
+
+      // Both chords also need a second voice for the >=2-voice bypass to not fire; give both
+      // an identical, unrelated held second voice so it contributes equally to each score.
+      const scoreCompound = realScoreFor([...prevCompound, 60], [...currCompound, 60], RESTLESSNESS);
+      const scoreSimple = realScoreFor([...prevSimple, 60], [...currSimple, 60], RESTLESSNESS);
+      expect(scoreCompound).toBe(scoreSimple);
+    });
+
+    it('handles an extreme, multi-octave leap (10+ octaves) without throwing or producing NaN', () => {
+      const score = realScoreFor([20, 25], [140, 145], RESTLESSNESS);
+      expect(Number.isNaN(score)).toBe(false);
+      expect(score).toBeGreaterThanOrEqual(1);
+      expect(score).toBeLessThanOrEqual(100);
     });
   });
 });

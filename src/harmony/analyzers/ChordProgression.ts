@@ -86,6 +86,25 @@ function toDenseBiasArray(biasMap: Readonly<Record<number, number>>): number[] {
  * time, just without the (apparently intended, never implemented) performance shortcut. Same
  * category as `IntrinsicConsonance`'s dead `_adjacentIntervalsCache`: documented, not "fixed",
  * since there's nothing incorrect to fix.
+ *
+ * **Bug fixed: `melodicInterval` indexed the bias table without being reduced to a simple
+ * interval first, found by the end-to-end integration test (step 14) crashing on the very
+ * first real generation run — not by this file's own, narrower unit tests.** The bias tables
+ * (`BiasTables.ts`) only cover one octave (semitone sizes `0`-`12`); `computeProgressionScore`
+ * computed `Math.abs(pitchA - pitchB)` directly, with no `% PERFECT_OCTAVE` reduction, so any
+ * matched-voice melodic leap larger than an octave — an entirely ordinary occurrence once real,
+ * wide-ranging instruments are involved — indexed past the end of the table. In the AS3
+ * original, `biasTable[melodicInterval] as uint` on the resulting `undefined` silently
+ * coerces to `0` (`ToUint32(NaN) = 0`), so the original just treated large leaps as "zero
+ * bias" without crashing. This port's `as number` performs no such runtime coercion, so the
+ * same `undefined` propagates as a genuine `NaN` through the running `totalBias` sum — and
+ * unlike the earlier, similar cases in this codebase, this one doesn't just produce a quietly
+ * wrong number: the corrupted `NaN` score fails `AnalysisScores.add`'s own validation and
+ * throws, so it was impossible to miss once a realistic scenario exercised it. Fixed by
+ * reducing to a simple interval first (`Math.abs(pitchA - pitchB) % IntervalsSize.PERFECT_OCTAVE`),
+ * matching the same convention `IntrinsicConsonance.ts` already established for interval-size
+ * table lookups, and standard voice-leading practice (a tenth behaves melodically like a
+ * third, just registrally displaced).
  */
 export class ChordProgression extends AbstractContentAnalyzer implements IMusicalContentAnalyzer {
   private externalMelodicScores: number[] = [];
@@ -339,7 +358,10 @@ export class ChordProgression extends AbstractContentAnalyzer implements IMusica
       const biasTable = pitchesA.length > numPitches - 2 ? this.externalMelodicScores : this.internalMelodicScores;
       const pitchA = pitchesA.shift() as number;
       const pitchB = pitchesB.shift() as number;
-      const melodicInterval = Math.abs(pitchA - pitchB);
+      // BUG FIX (see file header): reduced to a simple interval before the lookup -- the bias
+      // tables only cover one octave (0-12 semitones); an un-reduced leap larger than that
+      // indexed past the end of the table.
+      const melodicInterval = Math.abs(pitchA - pitchB) % IntervalsSize.PERFECT_OCTAVE;
       const localBias = (biasTable[melodicInterval] as number) * biasFactor;
       totalBias += localBias;
       pitchesA.reverse();
