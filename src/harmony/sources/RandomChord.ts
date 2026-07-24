@@ -82,6 +82,16 @@ interface RangeZone extends Array<number> {
  * comparator, in the same spirit as the `splice`/`TimeSignatureMap`-style
  * fixes elsewhere in this project.
  *
+ * **Bug fixed: `voiceIndex` was 0-based instead of the documented 1-based.**
+ * `zone.voiceIndex = instrumentZones.length - 1 - voiceIndex` produced values
+ * `0` to `length - 1`, but `IPitchAllocation.voiceIndex`'s own doc states the
+ * value is "1 based (not 0 based)", and `VoiceCohesion.ts`'s slot-collection
+ * logic generates keys `1..voiceCount` to match that contract. Found while
+ * porting `VoiceCohesion.ts` (confirmed with the project owner): with the
+ * un-fixed formula, whichever voice landed on `voiceIndex === 0` would never
+ * match any slot `VoiceCohesion` generates, silently treated as permanently
+ * inactive. Fixed by dropping the `- 1`.
+ *
  * **Injectable `randomFn`** (per this project's standing convention,
  * flagged but not mandated by the top-level README's gotcha #11):
  * threaded through to every call site that consumes randomness
@@ -252,8 +262,16 @@ export class RandomChord extends AbstractRawMusicSource implements IRawMusicSour
         // N.B.: storing static properties on an Array of integers/MIDI pitches.
         // The app lays out voices from top to bottom; as our Array has the bass zone in first index, we
         // need to report voices in reverse order.
+        //
+        // BUG FIX (found while porting VoiceCohesion.ts, confirmed with the project owner): the AS3
+        // original computes `instrumentZones.length - 1 - voiceIndex`, a 0-based result (`0` to
+        // `length - 1`) -- but `IPitchAllocation.voiceIndex`'s own doc states the value is "1 based
+        // (not 0 based)", and `VoiceCohesion.as`'s `_collectVoiceSlots` generates slot keys
+        // `1..voiceCount` to match. With the un-fixed formula, whichever voice landed on `voiceIndex
+        // === 0` would never match any slot `VoiceCohesion` generates, silently treated as permanently
+        // inactive. Dropping the `- 1` yields the correct `1..length` range.
         zone.instrument = instrument;
-        zone.voiceIndex = instrumentZones.length - 1 - voiceIndex;
+        zone.voiceIndex = instrumentZones.length - voiceIndex;
       });
     }
 

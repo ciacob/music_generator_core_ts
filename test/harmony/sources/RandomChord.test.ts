@@ -201,4 +201,30 @@ describe('RandomChord', () => {
       expect(pitch.midiNote).toBeLessThanOrEqual(piano.midiRange[1] as number);
     }
   });
+
+  it('assigns genuinely 1-based voiceIndex values (regression guard for the fixed 0-based bug)', () => {
+    // IPitchAllocation.voiceIndex's own contract: "1 based (not 0 based)". With the bug, the
+    // top-most voice of an instrument would land on voiceIndex === 0, which VoiceCohesion's
+    // slot-collection logic (1..voiceCount) could never match.
+    const piano = $get('Piano', 0) as IMusicalInstrument; // maximumAutonomousVoices === 4
+    const { parametersList, request } = buildFixture([piano], {
+      lowestPitchPercent: 1,
+      highestPitchPercent: 100,
+      voicesNumberPercent: 100,
+      intrinsicConsonance: 1,
+      enforceConsonance: 0,
+    });
+    const source = new RandomChord(seededRandom(11));
+    const [unit] = source.output(new MusicUnit(), context, parametersList, request);
+
+    const voiceIndices = (unit?.pitchAllocations ?? []).map((allocation) => allocation.voiceIndex);
+    expect(voiceIndices).toHaveLength(piano.maximumAutonomousVoices);
+    expect(voiceIndices).not.toContain(0);
+    for (const voiceIndex of voiceIndices) {
+      expect(voiceIndex).toBeGreaterThanOrEqual(1);
+      expect(voiceIndex).toBeLessThanOrEqual(piano.maximumAutonomousVoices);
+    }
+    // All four voices get distinct indices covering the full 1..4 range exactly once each.
+    expect([...voiceIndices].sort((a, b) => a - b)).toEqual([1, 2, 3, 4]);
+  });
 });
