@@ -1,8 +1,8 @@
 # music-generation-engine (TypeScript port)
 
 Node.js / TypeScript port of the ActionScript 3 stochastic music generation
-engine. This package is being built incrementally, translating one source
-package at a time from the original AS3 reference snapshot.
+engine, translated package by package from the original AS3 reference
+snapshot.
 
 See the top-level `README.md` in the parent `music-generation-engine-ts/`
 folder (sibling `as-sources/` directory) for:
@@ -11,13 +11,16 @@ folder (sibling `as-sources/` directory) for:
 - the AS3 → TypeScript translation gotchas table,
 - the suggested translation order and project layout,
 - the minimal fixture / first integration-test target,
-- licensing notes (unresolved as of this scaffold — see that document before
-  publishing).
+- licensing notes (still unresolved — see that document before publishing).
 
 ## Status
 
-Scaffold only — `src/` mirrors the suggested layout with placeholder
-directories; no classes have been translated yet.
+The AS3 → TypeScript port is complete — all translation steps done, full
+test suite passing, `tsc --strict` clean. For the current state, what's
+next, and everything worth knowing before touching this codebase, see
+`ONBOARDING.md` in this repo. For the full history of decisions, fixes, and
+rationale behind them, see `git log` (commit messages are long-form and
+detailed, one per meaningful change).
 
 ## Scripts
 
