@@ -153,9 +153,9 @@ export class RandomChord extends AbstractRawMusicSource implements IRawMusicSour
     parameters: IParametersList,
     request: IMusicRequest,
   ): number {
-    const percentTime = Math.round(analysisContext.percentTime * 100);
+    const timeSlot = Math.round(analysisContext.percentTime * 100);
     const consonanceParam = parameters.getByName(ParameterNames.INTRINSIC_CONSONANCE)[0] as IParameter;
-    return request.userSettings.getValueAt(consonanceParam, percentTime) as number;
+    return request.userSettings.getValueAt(consonanceParam, timeSlot) as number;
   }
 
   /** Retrieves the value of the "Enforce Consonance" parameter, as a boolean. */
@@ -187,7 +187,7 @@ export class RandomChord extends AbstractRawMusicSource implements IRawMusicSour
     request: IMusicRequest,
   ): IMusicUnit {
     // GRAB CONTEXT
-    const percentTime = Math.round(analysisContext.percentTime * 100);
+    const timeSlot = Math.round(analysisContext.percentTime * 100);
     const getParam = parameters.getByName.bind(parameters);
     const settings = request.userSettings;
 
@@ -201,9 +201,9 @@ export class RandomChord extends AbstractRawMusicSource implements IRawMusicSour
     // GRAB PARAMETERS' VALUES
     // Chord range
     const lowestParam = getParam(ParameterNames.LOWEST_PITCH)[0] as IParameter;
-    const lowestPercent = (settings.getValueAt(lowestParam, percentTime) as number) * 0.01;
+    const lowestPercent = (settings.getValueAt(lowestParam, timeSlot) as number) * 0.01;
     const highestParam = getParam(ParameterNames.HIGHEST_PITCH)[0] as IParameter;
-    const highestPercent = (settings.getValueAt(highestParam, percentTime) as number) * 0.01;
+    const highestPercent = (settings.getValueAt(highestParam, timeSlot) as number) * 0.01;
     const middleRange = this.getAverageMiddleRange(instruments);
     const highestPitch = this.getHighestAvailablePitch(instruments);
     const lowestPitch = this.getLowestAvailablePitch(instruments);
@@ -212,7 +212,7 @@ export class RandomChord extends AbstractRawMusicSource implements IRawMusicSour
 
     // Number of pitches in the chord
     const numVoicesParam = getParam(ParameterNames.VOICES_NUMBER)[0] as IParameter;
-    const numVoicesPercent = (settings.getValueAt(numVoicesParam, percentTime) as number) * 0.01;
+    const numVoicesPercent = (settings.getValueAt(numVoicesParam, timeSlot) as number) * 0.01;
     const maxNumVoices = this.getTotalNumVoices(instruments);
     const numVoices =
       maxNumVoices >= 2

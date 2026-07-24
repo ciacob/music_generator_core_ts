@@ -122,10 +122,10 @@ export class ChordProgression extends AbstractContentAnalyzer implements IMusica
     // next music unit. This directly influences the likeliness of held notes on a
     // "per-voice" basis, and causes a blend of polyphony to mix into the, otherwise,
     // homophonic choral.
-    const percentTime = Math.round(analysisContext.percentTime * 100);
+    const timeSlot = Math.round(analysisContext.percentTime * 100);
     const settings = request.userSettings;
     const restlessnessParam = parameters.getByName(ParameterNames.VOICE_RESTLESSNESS)[0] as IParameter;
-    const restlessNess = settings.getValueAt(restlessnessParam, percentTime) as number;
+    const restlessNess = settings.getValueAt(restlessnessParam, timeSlot) as number;
     const rawSteadinessFactor = (99 - (restlessNess - 1)) / 99;
     const minSteadinessFactor = ParameterCommons.VOICE_RESTLESSNESS_MIN;
     const maxSteadinessFactor = ParameterCommons.VOICE_RESTLESSNESS_MAX;

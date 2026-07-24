@@ -14,13 +14,13 @@ import {
 import type { IParameter } from './interfaces/IParameter.js';
 import type { ISettingsList } from './interfaces/ISettingsList.js';
 
-const TIME_ERR_HEADER = 'Invalid percent time [%s] set for parameter [%s]. Details:';
-const TOO_SMALL_TIME_ERR = 'Percent time is too small: [%s] is less than minimum allowed [%s].';
-const TOO_LARGE_TIME_ERR = 'Percent time is too large: [%s] is greater than maximum allowed [%s].';
+const TIME_ERR_HEADER = 'Invalid time slot [%s] set for parameter [%s]. Details:';
+const TOO_SMALL_TIME_ERR = 'Time slot is too small: [%s] is less than minimum allowed [%s].';
+const TOO_LARGE_TIME_ERR = 'Time slot is too large: [%s] is greater than maximum allowed [%s].';
 const NOT_ARRAY_TIME_ERR =
-  'Type of parameter [%s] is not Array, therefore percent time cannot be [%s]. It must always be [%s].';
+  'Type of parameter [%s] is not Array, therefore time slot cannot be [%s]. It must always be [%s].';
 
-const VALUE_ERR_HEADER = 'Invalid value [%s] set for parameter [%s] at percent time [%s]. Details:';
+const VALUE_ERR_HEADER = 'Invalid value [%s] set for parameter [%s] at time slot [%s]. Details:';
 const NULL_VALUE_ERR = 'Value is NULL.';
 const BAD_TYPE_VALUE_ERR = 'Expected type [%s] but encountered [%s].';
 const NAN_VALUE_ERR = 'Value is not a number (NaN)';
@@ -34,7 +34,7 @@ const TOO_LARGE_VALUE_ERR = 'Value is too large: [%s] is greater than maximum al
  * Ported from
  * `as-sources/legacy-generators-core-library/ro/se/legacy/generators/core/SettingsList.as`.
  *
- * Each parameter's recorded values are kept as a sparse `percentTime ->
+ * Each parameter's recorded values are kept as a sparse `timeSlot ->
  * value` map (`Record<number, unknown>`) rather than the AS3 original's
  * fixed-length `Array` — behaviorally equivalent (both rely on "is this
  * slot `undefined`" checks), but avoids JS's sparse-array-hole quirks for
@@ -58,17 +58,17 @@ export class SettingsList implements ISettingsList {
 
   private values: Record<string, Record<number, unknown>> = {};
 
-  setValueAt(parameter: IParameter, percentTime: number, value: unknown): void {
+  setValueAt(parameter: IParameter, timeSlot: number, value: unknown): void {
     const uid = parameter.uid;
     if (!(uid in this.values)) {
       this.values[uid] = {};
     }
-    if (this.assertProperValue(parameter, percentTime, value) && this.assertProperTime(parameter, percentTime)) {
-      (this.values[uid] as Record<number, unknown>)[percentTime] = value;
+    if (this.assertProperValue(parameter, timeSlot, value) && this.assertProperTime(parameter, timeSlot)) {
+      (this.values[uid] as Record<number, unknown>)[timeSlot] = value;
     }
   }
 
-  getValueAt(parameter: IParameter, percentTime: number): unknown {
+  getValueAt(parameter: IParameter, timeSlot: number): unknown {
     const uid = parameter.uid;
     if (!(uid in this.values)) {
       return null;
@@ -84,18 +84,18 @@ export class SettingsList implements ISettingsList {
 
     // If interpolation is an option, return the interpolated value;
     // otherwise, return the last known (given) value.
-    const timeAtOrBefore = recordedTimeAtOrBefore(slots, percentTime);
+    const timeAtOrBefore = recordedTimeAtOrBefore(slots, timeSlot);
     if (timeAtOrBefore !== ERROR_CODE) {
       const valueAtOrBefore = slots[timeAtOrBefore];
       if (canInterpolate) {
-        const timeAtOrAfter = recordedTimeAtOrAfter(slots, percentTime);
+        const timeAtOrAfter = recordedTimeAtOrAfter(slots, timeSlot);
         const valueAtOrAfter = slots[timeAtOrAfter];
         let interpolatedValue = computeLinearInterpolation(
           timeAtOrBefore,
           valueAtOrBefore as number,
           timeAtOrAfter,
           valueAtOrAfter as number,
-          percentTime,
+          timeSlot,
         );
         // Round the interpolated value to an integer.
         interpolatedValue = Math.round(interpolatedValue);
@@ -122,7 +122,7 @@ export class SettingsList implements ISettingsList {
    *    `TYPE_OBJECT`), no validation is performed yet (matching the
    *    original's own "TODO: implement when actually needed").
    */
-  private assertProperValue(parameter: IParameter, percentTime: number, value: unknown): boolean {
+  private assertProperValue(parameter: IParameter, timeSlot: number, value: unknown): boolean {
     const assertTokens: string[] = [];
     const type = parameter.type;
     const haveMinThreshold =
@@ -182,35 +182,35 @@ export class SettingsList implements ISettingsList {
     // TYPE_BOOLEAN / TYPE_STRING / TYPE_OBJECT: no-op, matching the original's own "TODO: implement when actually needed".
 
     if (assertTokens.length > 0) {
-      assertTokens.unshift(sprintf(VALUE_ERR_HEADER, value, parameter.name, percentTime));
+      assertTokens.unshift(sprintf(VALUE_ERR_HEADER, value, parameter.name, timeSlot));
       throw new Error(assertTokens.join(CommonStrings.NEW_LINE));
     }
     return true;
   }
 
   /**
-   * Throws if `percentTime` is out of range, or inappropriate for
+   * Throws if `timeSlot` is out of range, or inappropriate for
    * `parameter`'s type. Effectively enforces client code to store
    * semantically accurate data in each triplet.
    *
    * Validation rules:
-   * 1. `percentTime` must be in the range `[1, 100]` inclusive.
-   * 2. If `parameter.type` is NOT `TYPE_ARRAY`, `percentTime` must ALWAYS
+   * 1. `timeSlot` must be in the range `[1, 100]` inclusive.
+   * 2. If `parameter.type` is NOT `TYPE_ARRAY`, `timeSlot` must ALWAYS
    *    be the minimum allowed value (`1`).
    */
-  private assertProperTime(parameter: IParameter, percentTime: number): boolean {
+  private assertProperTime(parameter: IParameter, timeSlot: number): boolean {
     const assertTokens: string[] = [];
-    if (percentTime < MIN_TIME) {
-      assertTokens.push(sprintf(TOO_SMALL_TIME_ERR, percentTime, MIN_TIME));
+    if (timeSlot < MIN_TIME) {
+      assertTokens.push(sprintf(TOO_SMALL_TIME_ERR, timeSlot, MIN_TIME));
     }
-    if (percentTime > MAX_TIME) {
-      assertTokens.push(sprintf(TOO_LARGE_TIME_ERR, percentTime, MAX_TIME));
+    if (timeSlot > MAX_TIME) {
+      assertTokens.push(sprintf(TOO_LARGE_TIME_ERR, timeSlot, MAX_TIME));
     }
-    if (parameter.type !== CoreOperationKeys.TYPE_ARRAY && percentTime !== MIN_TIME) {
-      assertTokens.push(sprintf(NOT_ARRAY_TIME_ERR, parameter.name, percentTime, MIN_TIME));
+    if (parameter.type !== CoreOperationKeys.TYPE_ARRAY && timeSlot !== MIN_TIME) {
+      assertTokens.push(sprintf(NOT_ARRAY_TIME_ERR, parameter.name, timeSlot, MIN_TIME));
     }
     if (assertTokens.length > 0) {
-      assertTokens.unshift(sprintf(TIME_ERR_HEADER, percentTime, parameter.name));
+      assertTokens.unshift(sprintf(TIME_ERR_HEADER, timeSlot, parameter.name));
       throw new Error(assertTokens.join(CommonStrings.NEW_LINE));
     }
     return true;

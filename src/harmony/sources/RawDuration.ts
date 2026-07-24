@@ -84,11 +84,10 @@ export class RawDuration extends AbstractRawMusicSource implements IRawMusicSour
     parameters: IParametersList,
     request: IMusicRequest,
   ): IMusicUnit[] {
-    // Obtain current percent time and retrieve DURATIONS parameter value
-    const percentTime = analysisContext.percentTime;
-    const time = Math.round(percentTime * 100);
+    // Obtain current time slot and retrieve DURATIONS parameter value
+    const timeSlot = Math.round(analysisContext.percentTime * 100);
     const duration = parameters.getByName(ParameterNames.DURATIONS)[0] as IParameter;
-    const durationValue = request.userSettings.getValueAt(duration, time) as number;
+    const durationValue = request.userSettings.getValueAt(duration, timeSlot) as number;
 
     // Infer available durations and their weights from distribution chart
     const durationsInfo = this.inferDurationsTableFor(durationValue);

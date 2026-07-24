@@ -36,10 +36,12 @@ export class AnalysisContext implements IAnalysisContext {
     this.proposedContentValue = value;
   }
 
+  /** @see IAnalysisContext.percentTime */
   get percentTime(): number {
     return this.percentTimeValue;
   }
 
+  /** @see IAnalysisContext.percentTime */
   set percentTime(value: number) {
     this.percentTimeValue = value;
   }

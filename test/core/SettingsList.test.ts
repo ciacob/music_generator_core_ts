@@ -33,7 +33,7 @@ describe('SettingsList basics', () => {
     expect(settings.getValueAt(param, 1)).toBe(50);
   });
 
-  it('setValueAt / getValueAt round-trips a value for a TYPE_INT parameter (percentTime fixed at 1)', () => {
+  it('setValueAt / getValueAt round-trips a value for a TYPE_INT parameter (timeSlot fixed at 1)', () => {
     const settings = new SettingsList();
     const param = makeIntParameter();
     settings.setValueAt(param, 1, 7);
@@ -53,13 +53,13 @@ describe('SettingsList validation', () => {
     expect(() => settings.setValueAt(makeArrayParameter(), 1, 5.5)).toThrow();
   });
 
-  it('throws for percentTime outside [1, 100]', () => {
+  it('throws for timeSlot outside [1, 100]', () => {
     const settings = new SettingsList();
     expect(() => settings.setValueAt(makeArrayParameter(), 0, 50)).toThrow();
     expect(() => settings.setValueAt(makeArrayParameter(), 101, 50)).toThrow();
   });
 
-  it('throws for a non-array parameter set at a percentTime other than 1', () => {
+  it('throws for a non-array parameter set at a timeSlot other than 1', () => {
     const settings = new SettingsList();
     expect(() => settings.setValueAt(makeIntParameter(), 50, 7)).toThrow();
   });

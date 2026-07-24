@@ -36,7 +36,7 @@ import type { IRawMusicSource } from '../../core/interfaces/IRawMusicSource.js';
 export class MultiCriterialSorter extends AbstractRawMusicSource implements IRawMusicSource {
   private parameters: IParametersList | undefined;
   private request: IMusicRequest | undefined;
-  private percentTime = 0;
+  private timeSlot = 0;
 
   /** @see IRawMusicSource.output */
   override output(
@@ -48,7 +48,7 @@ export class MultiCriterialSorter extends AbstractRawMusicSource implements IRaw
     // Grab context
     this.parameters = parameters;
     this.request = request;
-    this.percentTime = Math.round(analysisContext.percentTime * 100);
+    this.timeSlot = Math.round(analysisContext.percentTime * 100);
 
     // Sort music units by composite fitness
     const units = analysisContext.previousContent;
@@ -82,7 +82,7 @@ export class MultiCriterialSorter extends AbstractRawMusicSource implements IRaw
 
     const parameters = this.parameters as IParametersList;
     const request = this.request as IMusicRequest;
-    const percentTime = this.percentTime;
+    const timeSlot = this.timeSlot;
 
     // Accumulate squared distances for both units
     const context = {
@@ -107,7 +107,7 @@ export class MultiCriterialSorter extends AbstractRawMusicSource implements IRaw
       }
 
       // Get ideal/expected value from parameter settings
-      const expectedValue = request.userSettings.getValueAt(param, percentTime);
+      const expectedValue = request.userSettings.getValueAt(param, timeSlot);
       if (typeof expectedValue !== 'number' || Number.isNaN(expectedValue) || Number.isNaN(valueA)) {
         context.aborted = true;
         return false;

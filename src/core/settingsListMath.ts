@@ -20,35 +20,35 @@ const LAST_SLOT = MAX_TIME;
 export const ERROR_CODE = 404;
 
 /**
- * Returns the recorded time closest to `percentTime`, searching backward
+ * Returns the recorded time closest to `timeSlot`, searching backward
  * first; if nothing is found searching backward, falls back to a forward
  * search (`recordedTimeAtOrAfter`).
  *
- * @param slots A sparse `percentTime -> value` map (only defined at the
+ * @param slots A sparse `timeSlot -> value` map (only defined at the
  * indices where a value was actually recorded).
- * @param percentTime The point in time to start searching from.
+ * @param timeSlot The point in time to start searching from.
  * @param useFallback Whether to search in the opposite direction as a
  * fallback. Internally set to `false` on fallback calls, to prevent
  * infinite recursion.
- * @returns A percent time (`0`-`100` inclusive), or `ERROR_CODE`.
+ * @returns A time slot (`0`-`100` inclusive), or `ERROR_CODE`.
  */
 export function recordedTimeAtOrBefore(
   slots: Readonly<Record<number, unknown>>,
-  percentTime: number,
+  timeSlot: number,
   useFallback = true,
 ): number {
-  let searchIndex = percentTime;
+  let searchIndex = timeSlot;
   while (searchIndex >= MIN_TIME && slots[searchIndex] === undefined) {
     searchIndex--;
   }
   if (searchIndex < MIN_TIME) {
-    return useFallback ? recordedTimeAtOrAfter(slots, percentTime, false) : ERROR_CODE;
+    return useFallback ? recordedTimeAtOrAfter(slots, timeSlot, false) : ERROR_CODE;
   }
   return searchIndex;
 }
 
 /**
- * Returns the recorded time closest to `percentTime`, searching forward
+ * Returns the recorded time closest to `timeSlot`, searching forward
  * first; if nothing is found searching forward, falls back to a backward
  * search (`recordedTimeAtOrBefore`).
  *
@@ -56,15 +56,15 @@ export function recordedTimeAtOrBefore(
  */
 export function recordedTimeAtOrAfter(
   slots: Readonly<Record<number, unknown>>,
-  percentTime: number,
+  timeSlot: number,
   useFallback = true,
 ): number {
-  let searchIndex = percentTime;
+  let searchIndex = timeSlot;
   while (searchIndex <= LAST_SLOT && slots[searchIndex] === undefined) {
     searchIndex++;
   }
   if (searchIndex > LAST_SLOT) {
-    return useFallback ? recordedTimeAtOrBefore(slots, percentTime, false) : ERROR_CODE;
+    return useFallback ? recordedTimeAtOrBefore(slots, timeSlot, false) : ERROR_CODE;
   }
   return searchIndex;
 }
