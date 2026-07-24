@@ -14,7 +14,9 @@
 
 /** A single weighted candidate, before normalization. */
 export interface WeightEntry {
+  /** The candidate value itself. */
   readonly source: unknown;
+  /** The candidate's (possibly negative) selection weight. */
   readonly weight: number;
 }
 

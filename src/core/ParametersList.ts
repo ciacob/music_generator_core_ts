@@ -25,22 +25,27 @@ export class ParametersList implements IParametersList {
     this.parameters.length = 0;
   }
 
+  /** @see IParametersList.every */
   every(callback: ParametersListCallback<boolean>): boolean {
     return this.parameters.every((p, i) => callback(p, i, this));
   }
 
+  /** @see IParametersList.forEach */
   forEach(callback: ParametersListCallback<void>): void {
     this.parameters.forEach((p, i) => callback(p, i, this));
   }
 
+  /** @see IParametersList.getAt */
   getAt(index: number): IParameter {
     return this.parameters[index] as IParameter;
   }
 
+  /** @see IParametersList.getByName */
   getByName(parameterName: string): IParameter[] {
     return this.searchFor('name', parameterName);
   }
 
+  /** @see IParametersList.getByUid */
   getByUid(parameterUid: string): IParameter | null {
     const matches = this.searchFor('uid', parameterUid, true);
     const result = matches.length >= 1 ? (matches[0] as IParameter) : null;
@@ -52,60 +57,74 @@ export class ParametersList implements IParametersList {
     return result;
   }
 
+  /** @see IParametersList.indexOf */
   indexOf(searchParameter: IParameter, fromIndex = 0): number {
     return this.parameters.indexOf(searchParameter, fromIndex);
   }
 
+  /** @see IParametersList.insertAt */
   insertAt(index: number, parameter: IParameter): void {
     this.parameters.splice(index, 0, parameter);
   }
 
+  /** @see IParametersList.lastIndexOf */
   lastIndexOf(searchParameter: IParameter, fromIndex = 0x7fffffff): number {
     return this.parameters.lastIndexOf(searchParameter, fromIndex);
   }
 
+  /** @see IParametersList.length */
   get length(): number {
     return this.parameters.length;
   }
 
+  /** @see IParametersList.pop */
   pop(): IParameter | undefined {
     return this.parameters.pop();
   }
 
+  /** @see IParametersList.push */
   push(...parameters: IParameter[]): number {
     return this.parameters.push(...parameters);
   }
 
+  /** @see IParametersList.removeAt */
   removeAt(index: number): IParameter {
     const parameter = this.parameters[index] as IParameter;
     this.parameters.splice(index, 1);
     return parameter;
   }
 
+  /** @see IParametersList.reverse */
   reverse(): void {
     this.parameters.reverse();
   }
 
+  /** @see IParametersList.shift */
   shift(): IParameter | undefined {
     return this.parameters.shift();
   }
 
+  /** @see IParametersList.some */
   some(callback: ParametersListCallback<boolean>): boolean {
     return this.parameters.some((p, i) => callback(p, i, this));
   }
 
+  /** @see IParametersList.sort */
   sort(compareFn?: (a: IParameter, b: IParameter) => number): void {
     this.parameters.sort(compareFn);
   }
 
+  /** @see IParametersList.splice */
   splice(startIndex: number, deleteCount = 0xffffffff, ...parameters: IParameter[]): void {
     this.parameters.splice(startIndex, deleteCount, ...parameters);
   }
 
+  /** @see IParametersList.toString */
   toString(): string {
     return this.parameters.toString();
   }
 
+  /** @see IParametersList.unshift */
   unshift(...parameters: IParameter[]): number {
     return this.parameters.unshift(...parameters);
   }

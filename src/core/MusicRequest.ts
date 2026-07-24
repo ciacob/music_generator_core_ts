@@ -18,26 +18,32 @@ export class MusicRequest implements IMusicRequest {
   private timeMapValue!: ITimeSignatureMap;
   private userSettingsValue!: ISettingsList;
 
+  /** @see IMusicRequest.instruments */
   get instruments(): IMusicalInstrument[] {
     return this.instrumentsValue;
   }
 
+  /** @see IMusicRequest.instruments */
   set instruments(value: IMusicalInstrument[]) {
     this.instrumentsValue = value;
   }
 
+  /** @see IMusicRequest.timeMap */
   get timeMap(): ITimeSignatureMap {
     return this.timeMapValue;
   }
 
+  /** @see IMusicRequest.timeMap */
   set timeMap(value: ITimeSignatureMap) {
     this.timeMapValue = value;
   }
 
+  /** @see IMusicRequest.userSettings */
   get userSettings(): ISettingsList {
     return this.userSettingsValue;
   }
 
+  /** @see IMusicRequest.userSettings */
   set userSettings(value: ISettingsList) {
     this.userSettingsValue = value;
   }

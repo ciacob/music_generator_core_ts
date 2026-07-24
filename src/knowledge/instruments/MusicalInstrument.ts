@@ -75,10 +75,12 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     this.ordinalIndexValue = ordinalIndex;
   }
 
+  /** @see IMusicalInstrument.internalName */
   override get internalName(): string {
     return this.internalNameValue;
   }
 
+  /** @see IMusicalInstrument.name */
   override get name(): string {
     if (this.nameCache === undefined) {
       this.nameCache = (PartNames as Record<string, string>)[this.internalNameValue] as string;
@@ -86,6 +88,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.nameCache;
   }
 
+  /** @see IMusicalInstrument.abbreviatedName */
   override get abbreviatedName(): string {
     if (this.abbreviatedNameCache === undefined) {
       this.abbreviatedNameCache = (PartAbbreviatedNames as Record<string, string>)[
@@ -95,10 +98,12 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.abbreviatedNameCache;
   }
 
+  /** @see IMusicalInstrument.ordinalIndex */
   override get ordinalIndex(): number {
     return this.ordinalIndexValue;
   }
 
+  /** @see IMusicalInstrument.staffNames */
   override get staffNames(): readonly string[] {
     if (this.staffNamesCache === undefined) {
       this.staffNamesCache = (PartVoiceNames as Record<string, readonly string[]>)[
@@ -108,6 +113,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.staffNamesCache;
   }
 
+  /** @see IMusicalInstrument.abbreviatedStaffNames */
   override get abbreviatedStaffNames(): readonly string[] {
     if (this.abbreviatedStaffNamesCache === undefined) {
       this.abbreviatedStaffNamesCache = (PartAbbreviatedVoiceNames as Record<string, readonly string[]>)[
@@ -117,6 +123,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.abbreviatedStaffNamesCache;
   }
 
+  /** @see IMusicalInstrument.stavesNumber */
   override get stavesNumber(): number {
     if (this.stavesNumberCache === undefined) {
       this.stavesNumberCache = (PartDefaultStavesNumber as Record<string, number>)[
@@ -126,10 +133,12 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.stavesNumberCache;
   }
 
+  /** @see IMusicalInstrument.stavesNumber */
   override set stavesNumber(value: number) {
     this.stavesNumberCache = value;
   }
 
+  /** @see IMusicalInstrument.clefs */
   override get clefs(): readonly string[] {
     if (this.clefsCache === undefined) {
       this.clefsCache = (PartDefaultClefs as Record<string, readonly string[]>)[
@@ -139,6 +148,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.clefsCache;
   }
 
+  /** @see IMusicalInstrument.bracket */
   override get bracket(): string {
     if (this.bracketCache === undefined) {
       this.bracketCache = (PartDefaultBrackets as Record<string, string>)[this.internalNameValue] as string;
@@ -146,6 +156,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.bracketCache;
   }
 
+  /** @see IMusicalInstrument.partFamily */
   override get partFamily(): string {
     if (this.partFamilyCache === undefined) {
       this.partFamilyCache = getPartFamily(this.internalNameValue);
@@ -153,6 +164,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.partFamilyCache;
   }
 
+  /** @see IMusicalInstrument.midiPatch */
   override get midiPatch(): number {
     if (this.midiPatchCache === undefined) {
       this.midiPatchCache = (PartMidiPatches as Record<string, number>)[this.internalNameValue] as number;
@@ -160,6 +172,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.midiPatchCache;
   }
 
+  /** @see IMusicalInstrument.midiRange */
   override get midiRange(): readonly number[] {
     if (this.midiRangeCache === undefined) {
       this.midiRangeCache = (PartRanges as Record<string, readonly number[]>)[
@@ -169,6 +182,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.midiRangeCache;
   }
 
+  /** @see IMusicalInstrument.idealHarmonicRange */
   override get idealHarmonicRange(): readonly number[] {
     if (this.idealHarmonicRangeCache === undefined) {
       this.idealHarmonicRangeCache = (PartIdealHarmonicRange as Record<string, readonly number[]>)[
@@ -178,6 +192,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.idealHarmonicRangeCache;
   }
 
+  /** @see IMusicalInstrument.maximumPoliphony */
   override get maximumPoliphony(): number {
     if (this.maximumPoliphonyCache === undefined) {
       this.maximumPoliphonyCache = (PartMaxPoliphony as Record<string, number>)[
@@ -187,6 +202,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.maximumPoliphonyCache;
   }
 
+  /** @see IMusicalInstrument.maximumAutonomousVoices */
   override get maximumAutonomousVoices(): number {
     if (this.maximumAutonomousVoicesCache === undefined) {
       this.maximumAutonomousVoicesCache = (PartMaxAutonomousVoices as Record<string, number>)[
@@ -196,6 +212,7 @@ export class MusicalInstrument extends AbstractMusicalInstrument implements IMus
     return this.maximumAutonomousVoicesCache;
   }
 
+  /** @see IMusicalInstrument.transposition */
   override get transposition(): number {
     if (this.transpositionCache === undefined) {
       this.transpositionCache = (PartTranspositions as Record<string, number>)[

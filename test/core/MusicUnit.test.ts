@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Fraction } from '../../src/math/Fraction.js';
 import { MusicPitch } from '../../src/core/MusicPitch.js';
 import { MusicUnit } from '../../src/core/MusicUnit.js';
+import type { IPerformanceInstruction } from '../../src/core/interfaces/IPerformanceInstruction.js';
 
 describe('MusicUnit.uid', () => {
   it('lazily generates a UID on first read', () => {
@@ -87,6 +88,24 @@ describe('MusicUnit.clone', () => {
     const clone = unit.clone();
     expect(clone.pitches).toHaveLength(1);
     expect(clone.pitches[0]).toBe(pitch);
+  });
+
+  it('copies a real, populated performanceInstructions entry (by reference, shallow clone)', () => {
+    // IPerformanceInstruction has no concrete implementation anywhere in the engine (like
+    // ITupletDefinition, it's an interface-only stub) -- exercised here with a plain object
+    // literal matching its shape, the same treatment already given to tupletDefinition above.
+    const unit = new MusicUnit();
+    const instruction: IPerformanceInstruction = {
+      uid: 'instr-1',
+      name: 'Allegro',
+      category: 'tempo',
+      value: 132,
+    };
+    unit.performanceInstructions.push(instruction);
+    const clone = unit.clone();
+    expect(clone.performanceInstructions).toHaveLength(1);
+    expect(clone.performanceInstructions[0]).toBe(instruction);
+    expect(clone.performanceInstructions[0]?.category).toBe('tempo');
   });
 
   it('copies non-empty analysis scores', () => {

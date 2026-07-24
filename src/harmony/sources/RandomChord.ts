@@ -28,7 +28,9 @@ const REFERENCE_NUM_MIN_INTERVALS = 2;
  * freely; TypeScript just needs a named shape to allow it.
  */
 interface RangeZone extends Array<number> {
+  /** The instrument this zone's eventual pitch is destined for, once assigned. */
   instrument?: IMusicalInstrument;
+  /** The 1-based voice index (within `instrument`) this zone's eventual pitch is destined for, once assigned. */
   voiceIndex?: number;
 }
 
@@ -121,6 +123,7 @@ export class RandomChord extends AbstractRawMusicSource implements IRawMusicSour
   // Storage for rejected proposed chords' signatures, to spare evaluating again.
   private rejectedChords = new Set<string>();
 
+  /** @param randomFn Seedable source of randomness, used for every randomness need in this class. Defaults to `Math.random`. */
   constructor(private readonly randomFn: () => number = Math.random) {
     super();
   }

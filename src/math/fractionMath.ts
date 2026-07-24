@@ -20,7 +20,9 @@
  * so does any plain `{ numerator, denominator }` literal.
  */
 export interface FractionLike {
+  /** The (not necessarily reduced) numerator. */
   numerator: number;
+  /** The (not necessarily reduced) denominator. */
   denominator: number;
 }
 
@@ -39,9 +41,13 @@ export interface FractionLike {
  * this module preserves the original order of operations.
  */
 export interface NormalizedFraction {
+  /** The reduced (GCF-divided) numerator. */
   numerator: number;
+  /** The reduced (GCF-divided) denominator. */
   denominator: number;
+  /** The pre-reduction numerator that produced `numerator` once divided by the GCF. */
   rawNumerator: number;
+  /** The pre-reduction denominator that produced `denominator` once divided by the GCF. */
   rawDenominator: number;
 }
 

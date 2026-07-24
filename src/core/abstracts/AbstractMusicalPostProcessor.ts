@@ -12,6 +12,7 @@ import type { IMusicalPostProcessor } from '../interfaces/IMusicalPostProcessor.
 export abstract class AbstractMusicalPostProcessor implements IMusicalPostProcessor {
   private uidValue: string | undefined;
 
+  /** @see IMusicalPostProcessor.uid */
   get uid(): string {
     if (this.uidValue === undefined) {
       this.uidValue = generateRFC4122GUID();
@@ -19,5 +20,6 @@ export abstract class AbstractMusicalPostProcessor implements IMusicalPostProces
     return this.uidValue;
   }
 
+  /** @see IMusicalPostProcessor.execute */
   abstract execute(rawMusicalBody: IMusicalBody, request: IMusicRequest): void;
 }

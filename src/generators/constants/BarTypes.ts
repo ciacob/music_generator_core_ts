@@ -9,6 +9,7 @@ export const BarTypes = {
   AUTO_BAR: '≉',
 } as const;
 
+/** Returns all `BarTypes` values, in a fixed display order (auto, normal, double, final). */
 export function getAllTypes(): string[] {
   return [BarTypes.AUTO_BAR, BarTypes.NORMAL_BAR, BarTypes.DOUBLE_BAR, BarTypes.FINAL_BAR];
 }

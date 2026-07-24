@@ -62,6 +62,7 @@ const postProcessors: IMusicalPostProcessor[] = [new DurationsReducerProcessor()
  * internal `RawDuration` instance and the final hazard-pick's `NumberUtil.getRandomInteger` call.
  */
 export class Duration extends AbstractMusicalTrait implements IMusicalTrait {
+  /** @param randomFn Seedable source of randomness, threaded through to the internal `RawDuration` and the final hazard-pick. Defaults to `Math.random`. */
   constructor(private readonly randomFn: () => number = Math.random) {
     super();
   }

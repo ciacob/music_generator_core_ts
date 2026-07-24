@@ -16,6 +16,7 @@ export const ClefTypes = {
   ALTO: '∞',
 } as const;
 
+/** Returns all `ClefTypes` values. */
 export function getAllTypes(): string[] {
   return getAllValues(ClefTypes) as string[];
 }

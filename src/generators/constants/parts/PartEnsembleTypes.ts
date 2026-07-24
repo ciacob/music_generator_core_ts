@@ -172,6 +172,7 @@ export const PartEnsembleTypes = {
 
 let allEnsemblesCache: string[] | null = null;
 
+/** Returns all `PartEnsembleTypes` names, cached after the first call. */
 export function getAllEnsembles(): string[] {
   if (!allEnsemblesCache) {
     allEnsemblesCache = getAllNames(PartEnsembleTypes);

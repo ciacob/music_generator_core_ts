@@ -107,6 +107,7 @@ function weightToThresholdMultiplier(factor: number): number {
  * a real array, so `[]` (semantically identical: "no post-processors") is used instead.
  */
 export class Harmony extends AbstractMusicalTrait implements IMusicalTrait {
+  /** @param randomFn Seedable source of randomness, threaded through to the internal `RandomChord` and the final hazard-pick. Defaults to `Math.random`. */
   constructor(private readonly randomFn: () => number = Math.random) {
     super();
   }

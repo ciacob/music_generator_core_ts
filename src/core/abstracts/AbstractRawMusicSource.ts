@@ -17,6 +17,7 @@ import type { IRawMusicSource } from '../interfaces/IRawMusicSource.js';
 export abstract class AbstractRawMusicSource implements IRawMusicSource {
   private uidValue: string | undefined;
 
+  /** @see IRawMusicSource.output */
   abstract output(
     targetMusicUnit: IMusicUnit,
     analysisContext: IAnalysisContext,
@@ -24,6 +25,7 @@ export abstract class AbstractRawMusicSource implements IRawMusicSource {
     request: IMusicRequest,
   ): IMusicUnit[];
 
+  /** @see IRawMusicSource.uid */
   get uid(): string {
     if (this.uidValue === undefined) {
       this.uidValue = generateRFC4122GUID();

@@ -24,6 +24,7 @@ export abstract class AbstractContentAnalyzer implements IMusicalContentAnalyzer
   private uidValue: string | undefined;
   private thresholdValue = 0;
 
+  /** @see IMusicalContentAnalyzer.analyze */
   abstract analyze(
     targetMusicUnit: IMusicUnit,
     analysisContext: IAnalysisContext,
@@ -31,20 +32,25 @@ export abstract class AbstractContentAnalyzer implements IMusicalContentAnalyzer
     request: IMusicRequest,
   ): void;
 
+  /** @see IMusicalContentAnalyzer.weight */
   get weight(): number {
     return AbstractContentAnalyzer.DEFAULT_WEIGHT;
   }
 
+  /** @see IMusicalContentAnalyzer.name */
   abstract get name(): string;
 
+  /** @see IMusicalContentAnalyzer.threshold */
   get threshold(): number {
     return this.thresholdValue;
   }
 
+  /** @see IMusicalContentAnalyzer.threshold */
   set threshold(value: number) {
     this.thresholdValue = value;
   }
 
+  /** @see IMusicalContentAnalyzer.uid */
   get uid(): string {
     if (this.uidValue === undefined) {
       this.uidValue = generateRFC4122GUID();

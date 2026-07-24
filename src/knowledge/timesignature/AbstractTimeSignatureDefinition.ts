@@ -23,9 +23,14 @@ import type { ITimeSignatureDefinition } from './ITimeSignatureDefinition.js';
  * compile error instead, so no runtime guard is needed here at all.
  */
 export abstract class AbstractTimeSignatureDefinition implements ITimeSignatureDefinition {
+  /** @see ITimeSignatureDefinition.fraction */
   abstract get fraction(): IFraction;
+  /** @see ITimeSignatureDefinition.shownNumerator */
   abstract get shownNumerator(): number;
+  /** @see ITimeSignatureDefinition.shownDenominator */
   abstract get shownDenominator(): number;
+  /** @see ITimeSignatureDefinition.metricAccents */
   abstract get metricAccents(): IMetricAccent[];
+  /** @see ITimeSignatureDefinition.junctions */
   abstract get junctions(): IFraction[];
 }

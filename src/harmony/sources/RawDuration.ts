@@ -25,7 +25,9 @@ const SIXTEENTH = 'sixteenth';
 
 /** One `{fraction, weight}` entry, as inferred from the distribution chart for a given interpolation position. */
 interface DurationInfo {
+  /** The candidate duration. */
   fraction: IFraction;
+  /** The candidate's selection weight, interpolated from the distribution chart. */
   weight: number;
 }
 
@@ -68,6 +70,7 @@ export class RawDuration extends AbstractRawMusicSource implements IRawMusicSour
    */
   private durationsDistributionChart: ISettingsList | undefined;
 
+  /** @param randomFn Seedable source of randomness, threaded through to the internal `WeightedRandomPicker`. Defaults to `Math.random`. */
   constructor(private readonly randomFn: () => number = Math.random) {
     super();
   }

@@ -8,7 +8,9 @@
  * `as-sources/legacy-generators-core-library/ro/se/legacy/generators/core/SettingsList.as`.
  */
 
+/** The smallest legal `timeSlot` value accepted by `SettingsList.setValueAt`/`getValueAt`. */
 export const MIN_TIME = 1;
+/** The largest legal `timeSlot` value accepted by `SettingsList.setValueAt`/`getValueAt`. */
 export const MAX_TIME = 100;
 const LAST_SLOT = MAX_TIME;
 

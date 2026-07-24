@@ -26,10 +26,12 @@ export class MusicalBody implements IMusicalBody {
   private units: IMusicUnit[] = [];
   private durationValue: IFraction | undefined;
 
+  /** @see IMusicalBody.duration */
   get duration(): IFraction {
     return this.durationValue ?? this.zeroFraction;
   }
 
+  /** @see IMusicalBody.updateDuration */
   updateDuration(): void {
     if (!this.durationValue) {
       this.durationValue = new Fraction();
@@ -40,40 +42,49 @@ export class MusicalBody implements IMusicalBody {
     }
   }
 
+  /** @see IMusicalBody.length */
   get length(): number {
     return this.units.length;
   }
 
+  /** @see IMusicalBody.length */
   set length(value: number) {
     this.units.length = value;
     this.updateDuration();
   }
 
+  /** @see IMusicalBody.every */
   every(callback: MusicalBodyCallback<boolean>): boolean {
     return this.units.every((u, i) => callback(u, i, this));
   }
 
+  /** @see IMusicalBody.forEach */
   forEach(callback: MusicalBodyCallback<void>): void {
     this.units.forEach((u, i) => callback(u, i, this));
   }
 
+  /** @see IMusicalBody.getAt */
   getAt(index: number): IMusicUnit {
     return this.units[index] as IMusicUnit;
   }
 
+  /** @see IMusicalBody.indexOf */
   indexOf(searchUnit: IMusicUnit, fromIndex = 0): number {
     return this.units.indexOf(searchUnit, fromIndex);
   }
 
+  /** @see IMusicalBody.insertAt */
   insertAt(index: number, unit: IMusicUnit): void {
     this.units.splice(index, 0, unit);
     this.addDurationOf(unit);
   }
 
+  /** @see IMusicalBody.lastIndexOf */
   lastIndexOf(searchUnit: IMusicUnit, fromIndex = 0x7fffffff): number {
     return this.units.lastIndexOf(searchUnit, fromIndex);
   }
 
+  /** @see IMusicalBody.pop */
   pop(): IMusicUnit | undefined {
     const unit = this.units[this.units.length - 1];
     if (unit) {
@@ -82,6 +93,7 @@ export class MusicalBody implements IMusicalBody {
     return this.units.pop();
   }
 
+  /** @see IMusicalBody.push */
   push(...units: IMusicUnit[]): number {
     for (const unit of units) {
       this.addDurationOf(unit);
@@ -89,6 +101,7 @@ export class MusicalBody implements IMusicalBody {
     return this.units.push(...units);
   }
 
+  /** @see IMusicalBody.removeAt */
   removeAt(index: number): IMusicUnit {
     const unit = this.units[index] as IMusicUnit;
     this.removeDurationOf(unit);
@@ -96,10 +109,12 @@ export class MusicalBody implements IMusicalBody {
     return unit;
   }
 
+  /** @see IMusicalBody.reverse */
   reverse(): void {
     this.units.reverse();
   }
 
+  /** @see IMusicalBody.shift */
   shift(): IMusicUnit | undefined {
     const unit = this.units[0];
     if (unit) {
@@ -108,14 +123,17 @@ export class MusicalBody implements IMusicalBody {
     return this.units.shift();
   }
 
+  /** @see IMusicalBody.some */
   some(callback: MusicalBodyCallback<boolean>): boolean {
     return this.units.some((u, i) => callback(u, i, this));
   }
 
+  /** @see IMusicalBody.sort */
   sort(compareFn?: (a: IMusicUnit, b: IMusicUnit) => number): void {
     this.units.sort(compareFn);
   }
 
+  /** @see IMusicalBody.splice */
   splice(startIndex: number, deleteCount = 0xffffffff, ...units: IMusicUnit[]): void {
     if (deleteCount > 0) {
       const unitsToDelete = this.units.slice(startIndex, startIndex + deleteCount);
@@ -131,10 +149,12 @@ export class MusicalBody implements IMusicalBody {
     this.units.splice(startIndex, deleteCount, ...units);
   }
 
+  /** @see IMusicalBody.toString */
   toString(): string {
     return this.units.toString();
   }
 
+  /** @see IMusicalBody.unshift */
   unshift(...units: IMusicUnit[]): number {
     for (const unit of units) {
       this.addDurationOf(unit);

@@ -20,24 +20,42 @@ import type { IMusicalInstrument } from './IMusicalInstrument.js';
 export abstract class AbstractMusicalInstrument implements IMusicalInstrument {
   private uidValue: string | undefined;
 
+  /** @see IMusicalInstrument.abbreviatedName */
   abstract get abbreviatedName(): string;
+  /** @see IMusicalInstrument.ordinalIndex */
   abstract get ordinalIndex(): number;
+  /** @see IMusicalInstrument.abbreviatedStaffNames */
   abstract get abbreviatedStaffNames(): readonly string[];
+  /** @see IMusicalInstrument.bracket */
   abstract get bracket(): string;
+  /** @see IMusicalInstrument.clefs */
   abstract get clefs(): readonly string[];
+  /** @see IMusicalInstrument.internalName */
   abstract get internalName(): string;
+  /** @see IMusicalInstrument.midiPatch */
   abstract get midiPatch(): number;
+  /** @see IMusicalInstrument.midiRange */
   abstract get midiRange(): readonly number[];
+  /** @see IMusicalInstrument.idealHarmonicRange */
   abstract get idealHarmonicRange(): readonly number[];
+  /** @see IMusicalInstrument.maximumPoliphony */
   abstract get maximumPoliphony(): number;
+  /** @see IMusicalInstrument.maximumAutonomousVoices */
   abstract get maximumAutonomousVoices(): number;
+  /** @see IMusicalInstrument.name */
   abstract get name(): string;
+  /** @see IMusicalInstrument.partFamily */
   abstract get partFamily(): string;
+  /** @see IMusicalInstrument.staffNames */
   abstract get staffNames(): readonly string[];
+  /** @see IMusicalInstrument.stavesNumber */
   abstract get stavesNumber(): number;
+  /** @see IMusicalInstrument.stavesNumber */
   abstract set stavesNumber(value: number);
+  /** @see IMusicalInstrument.transposition */
   abstract get transposition(): number;
 
+  /** @see IMusicalInstrument.uid */
   get uid(): string {
     if (!this.uidValue) {
       this.uidValue = generateRFC4122GUID();
@@ -45,6 +63,7 @@ export abstract class AbstractMusicalInstrument implements IMusicalInstrument {
     return this.uidValue;
   }
 
+  /** @see IMusicalInstrument.uid */
   set uid(value: string) {
     this.uidValue = value;
   }

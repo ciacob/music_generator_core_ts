@@ -17,6 +17,10 @@ import type { IMetricAccent } from './IMetricAccent.js';
  * rather than leaving the fields transiently `NaN`/`null`.
  */
 export class MetricAccent implements IMetricAccent {
+  /**
+   * @param strength @see IMetricAccent.strength
+   * @param position @see IMetricAccent.position
+   */
   constructor(
     public strength: number = 0,
     public position: IFraction = Fraction.ZERO,

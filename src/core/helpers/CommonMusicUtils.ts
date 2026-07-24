@@ -35,17 +35,35 @@ import { IntervalRegistryEntry } from './IntervalRegistryEntry.js';
  * performance decision in the original, not an accident.
  */
 
+/**
+ * Named consonance-score bands returned by `IntrinsicConsonance`'s `computeScore`, one per
+ * Hindemith chord-classification category. Extracted here as named constants purely for
+ * readability during translation — the AS3 original returned these as inline magic numbers
+ * (`return 100;`, etc.) with no named equivalents to carry over. Values themselves are
+ * unchanged from the original; only the names are new.
+ */
 export const TRIADS_WITH_ROOT_IN_BASS_SCORE = 100;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const TRIADS_WITH_ROOT_UPPER_SCORE = 90;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const ADDED_NOTES_CHORDS_ROOT_IN_BASS_SCORE = 80;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const ADDED_NOTES_CHORDS_ROOT_UPPER_SCORE = 70;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const AUGMENTED_OR_QUARTAL_SCORE = 60;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const DIMINISHED_SCORE = 55;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const DOMINANT_TRIAD_SCORE = 50;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const DOMINANT_INVERSIONS_ROOT_IN_BASS_SCORE = 40;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const DOMINANT_INVERSIONS_ROOT_UPPER_SCORE = 30;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const DOMINANT_NINTH_SCORE = 20;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const CLUSTERS_ROOT_IN_BASS_SCORE = 10;
+/** @see TRIADS_WITH_ROOT_IN_BASS_SCORE */
 export const CLUSTERS_ROOT_UPPER_SCORE = 1;
 
 /** @deprecated Kept for reference/fidelity; `getChordDetails` returns a typed `ChordDetails` object instead of using this as a lookup key. */

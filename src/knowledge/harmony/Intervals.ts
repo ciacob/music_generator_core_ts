@@ -32,7 +32,9 @@ import { IntervalRootPositions } from './IntervalRootPositions.js';
  * interval's size (in semitones) and its bass ("low") MIDI pitch.
  */
 export interface HindemithSortable {
+  /** The interval's size, in semitones. */
   readonly size: number;
+  /** The interval's bass ("low") MIDI pitch. */
   readonly low: number;
 }
 

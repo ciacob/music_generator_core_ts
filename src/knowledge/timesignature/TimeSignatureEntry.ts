@@ -25,6 +25,7 @@ export class TimeSignatureEntry implements ITimeSignatureEntry {
   private signatureValue: ITimeSignatureDefinition | undefined;
   private durationCache: IFraction | undefined;
 
+  /** @see ITimeSignatureEntry.duration */
   get duration(): IFraction {
     if (!this.signatureValue) {
       return this.zeroFraction;
@@ -40,19 +41,23 @@ export class TimeSignatureEntry implements ITimeSignatureEntry {
     return this.durationCache;
   }
 
+  /** @see ITimeSignatureEntry.repetitions */
   get repetitions(): number {
     return this.repetitionsValue;
   }
 
+  /** @see ITimeSignatureEntry.repetitions */
   set repetitions(value: number) {
     this.repetitionsValue = value;
     this.durationDirty = true;
   }
 
+  /** @see ITimeSignatureEntry.signature */
   get signature(): ITimeSignatureDefinition | undefined {
     return this.signatureValue;
   }
 
+  /** @see ITimeSignatureEntry.signature */
   set signature(value: ITimeSignatureDefinition) {
     this.signatureValue = value;
     this.durationDirty = true;

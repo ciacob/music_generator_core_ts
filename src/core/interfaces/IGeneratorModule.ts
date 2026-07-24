@@ -11,6 +11,7 @@ export type GenerationState = 'in progress' | 'aborted' | 'completed' | 'error';
  * shape documented in the AS3 original.
  */
 export interface GenerationStatus {
+  /** The current generation state. */
   state: GenerationState;
   /** Progresses in `0.01` increments. */
   percentComplete: number;

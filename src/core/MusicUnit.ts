@@ -24,6 +24,7 @@ export class MusicUnit implements IMusicUnit {
   private readonly performanceInstructionsValue: IPerformanceInstruction[] = [];
   private analysisScoresValue: IAnalysisScores | undefined;
 
+  /** @see IMusicUnit.uid */
   get uid(): string {
     if (this.uidValue === undefined) {
       this.uidValue = generateRFC4122GUID();
@@ -31,42 +32,52 @@ export class MusicUnit implements IMusicUnit {
     return this.uidValue;
   }
 
+  /** @see IMusicUnit.duration */
   get duration(): IFraction {
     return this.durationValue;
   }
 
+  /** @see IMusicUnit.duration */
   set duration(value: IFraction) {
     this.durationValue = value;
   }
 
+  /** @see IMusicUnit.tupletRootUid */
   get tupletRootUid(): string {
     return this.tupletRootUidValue;
   }
 
+  /** @see IMusicUnit.tupletRootUid */
   set tupletRootUid(value: string) {
     this.tupletRootUidValue = value;
   }
 
+  /** @see IMusicUnit.tupletDefinition */
   get tupletDefinition(): ITupletDefinition {
     return this.tupletDefinitionValue;
   }
 
+  /** @see IMusicUnit.tupletDefinition */
   set tupletDefinition(value: ITupletDefinition) {
     this.tupletDefinitionValue = value;
   }
 
+  /** @see IMusicUnit.pitches */
   get pitches(): IMusicPitch[] {
     return this.pitchesValue;
   }
 
+  /** @see IMusicUnit.pitchAllocations */
   get pitchAllocations(): IPitchAllocation[] {
     return this.pitchAllocationsValue;
   }
 
+  /** @see IMusicUnit.performanceInstructions */
   get performanceInstructions(): IPerformanceInstruction[] {
     return this.performanceInstructionsValue;
   }
 
+  /** @see IMusicUnit.analysisScores */
   get analysisScores(): IAnalysisScores {
     if (!this.analysisScoresValue) {
       this.analysisScoresValue = new AnalysisScores();
@@ -74,6 +85,7 @@ export class MusicUnit implements IMusicUnit {
     return this.analysisScoresValue;
   }
 
+  /** @see IMusicUnit.clone */
   clone(): IMusicUnit {
     const target = new MusicUnit();
     target.duration = this.durationValue;

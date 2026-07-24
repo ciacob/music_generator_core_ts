@@ -15,8 +15,10 @@ import type { IParametersList } from '../interfaces/IParametersList.js';
  * no `uid` or similar), so it's abstract-only.
  */
 export abstract class AbstractMusicalTrait implements IMusicalTrait {
+  /** @see IMusicalTrait.musicalPostProcessors */
   abstract get musicalPostProcessors(): IMusicalPostProcessor[];
 
+  /** @see IMusicalTrait.execute */
   abstract execute(
     targetMusicUnit: IMusicUnit,
     analysisContext: IAnalysisContext,

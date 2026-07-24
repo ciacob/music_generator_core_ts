@@ -11,6 +11,7 @@ import { toAS3ConstantCase } from '../../../utils/Strings.js';
 
 const PIANO_VOICES = ['Right Hand', 'Left Hand'] as const;
 
+/** Full voice names for each supported instrument/ensemble part, keyed by part name. */
 export const PartVoiceNames = {
   // Piano
   PIANO: PIANO_VOICES,

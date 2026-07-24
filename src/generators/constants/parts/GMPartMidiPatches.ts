@@ -80,7 +80,9 @@ export const GM_PATCH_DESCRIPTIONS: Record<keyof typeof GMPartMidiPatches, strin
 
 /** A GM instrument's descriptive name paired with its patch number. */
 export interface GMPatchInfo {
+  /** The General MIDI instrument's descriptive name (e.g. `"Acoustic Grand Piano"`). */
   gmName: string;
+  /** The General MIDI program/patch number. */
   gmPatch: number;
 }
 

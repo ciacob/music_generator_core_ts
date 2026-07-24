@@ -20,18 +20,22 @@ export class AnalysisContext implements IAnalysisContext {
   private proposedContentValue: unknown[] = [];
   private percentTimeValue = 0;
 
+  /** @see IAnalysisContext.previousContent */
   get previousContent(): IMusicUnit[] {
     return this.previousContentValue;
   }
 
+  /** @see IAnalysisContext.previousContent */
   set previousContent(value: IMusicUnit[]) {
     this.previousContentValue = value;
   }
 
+  /** @see IAnalysisContext.proposedContent */
   get proposedContent(): unknown[] {
     return this.proposedContentValue;
   }
 
+  /** @see IAnalysisContext.proposedContent */
   set proposedContent(value: unknown[]) {
     this.proposedContentValue = value;
   }

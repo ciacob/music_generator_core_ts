@@ -31,6 +31,7 @@ export const PartEnsembleSizes = {
 
 let allNamesCache: string[] | null = null;
 
+/** Returns all `PartEnsembleSizes` names, ordered by increasing size, cached after the first call. */
 export function getAllNamesOrdered(): string[] {
   if (!allNamesCache) {
     allNamesCache = getAllConstantNames(PartEnsembleSizes).sort(compareBySize);

@@ -58,6 +58,7 @@ export class SettingsList implements ISettingsList {
 
   private values: Record<string, Record<number, unknown>> = {};
 
+  /** @see ISettingsList.setValueAt */
   setValueAt(parameter: IParameter, timeSlot: number, value: unknown): void {
     const uid = parameter.uid;
     if (!(uid in this.values)) {
@@ -68,6 +69,7 @@ export class SettingsList implements ISettingsList {
     }
   }
 
+  /** @see ISettingsList.getValueAt */
   getValueAt(parameter: IParameter, timeSlot: number): unknown {
     const uid = parameter.uid;
     if (!(uid in this.values)) {

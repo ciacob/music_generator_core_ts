@@ -38,6 +38,7 @@ export class AnalysisScores implements IAnalysisScores {
   private criteriaList: string[] = [];
   private values: Record<string, number> = {};
 
+  /** @see IAnalysisScores.add */
   add(criteria: string, value: number): void {
     let clampedValue = value;
     if (clampedValue < MIN_SCORE) {
@@ -55,6 +56,7 @@ export class AnalysisScores implements IAnalysisScores {
     }
   }
 
+  /** @see IAnalysisScores.getValueFor */
   getValueFor(criteria: string): number {
     if (!(criteria in this.values)) {
       return NaN;
@@ -62,6 +64,7 @@ export class AnalysisScores implements IAnalysisScores {
     return this.values[criteria] as number;
   }
 
+  /** @see IAnalysisScores.remove */
   remove(criteria: string): void {
     const criteriaIndex = this.criteriaList.indexOf(criteria);
     if (criteriaIndex !== -1) {
@@ -70,6 +73,7 @@ export class AnalysisScores implements IAnalysisScores {
     }
   }
 
+  /** @see IAnalysisScores.forEach */
   forEach(iterator: AnalysisScoresIterator): void {
     for (const criteria of this.criteriaList) {
       const value = this.values[criteria] as number;
@@ -80,11 +84,13 @@ export class AnalysisScores implements IAnalysisScores {
     }
   }
 
+  /** @see IAnalysisScores.empty */
   empty(): void {
     this.criteriaList.length = 0;
     this.values = {};
   }
 
+  /** @see IAnalysisScores.isEmpty */
   isEmpty(): boolean {
     return this.criteriaList.length === 0;
   }

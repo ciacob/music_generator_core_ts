@@ -58,19 +58,29 @@ const IDEAL_CONTINUATION: Readonly<Record<string, string>> = {
 
 /** One `{ unit, proportion }` entry: a music unit, and the fraction of its duration falling in a given section. */
 interface SectionEntry {
+  /** The music unit this entry refers to. */
   unit: IMusicUnit;
+  /** The fraction (`0`-`1`) of `unit`'s own duration that falls within the section holding this entry. */
   proportion: number;
 }
 
+/** The absolute time positions (relative to the start of the analysis window) separating the three sections. */
 interface SectionBoundaries {
+  /** The end of the OLD section / start of the INTERIM section. */
   oldEnd: IFraction;
+  /** The end of the INTERIM section / start of the IMMEDIATE section. */
   interimEnd: IFraction;
 }
 
+/** The analysis window, split into three equal-duration sections. */
 interface Sections {
+  /** The earliest third of the window. */
   old: SectionEntry[];
+  /** The middle third of the window. */
   interim: SectionEntry[];
+  /** The most recent third of the window. */
   immediate: SectionEntry[];
+  /** The time positions separating the three sections. */
   boundaries: SectionBoundaries;
 }
 

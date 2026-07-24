@@ -39,39 +39,48 @@ export class TimeSignatureMap implements ITimeSignatureMap {
   private entries: ITimeSignatureEntry[] = [];
   private durationCache: IFraction | undefined;
 
+  /** @see ITimeSignatureMap.duration */
   get duration(): IFraction {
     return this.durationCache ?? this.zeroFraction;
   }
 
+  /** @see ITimeSignatureMap.length */
   get length(): number {
     return this.entries.length;
   }
 
+  /** @see ITimeSignatureMap.every */
   every(callback: TimeSignatureMapCallback<boolean>): boolean {
     return this.entries.every((entry, index) => callback(entry, index, this));
   }
 
+  /** @see ITimeSignatureMap.forEach */
   forEach(callback: TimeSignatureMapCallback<void>): void {
     this.entries.forEach((entry, index) => callback(entry, index, this));
   }
 
+  /** @see ITimeSignatureMap.getAt */
   getAt(index: number): ITimeSignatureEntry {
     return this.entries[index] as ITimeSignatureEntry;
   }
 
+  /** @see ITimeSignatureMap.indexOf */
   indexOf(searchEntry: ITimeSignatureEntry, fromIndex = 0): number {
     return this.entries.indexOf(searchEntry, fromIndex);
   }
 
+  /** @see ITimeSignatureMap.insertAt */
   insertAt(index: number, entry: ITimeSignatureEntry): void {
     this.entries.splice(index, 0, entry);
     this.addDurationOf(entry);
   }
 
+  /** @see ITimeSignatureMap.lastIndexOf */
   lastIndexOf(searchEntry: ITimeSignatureEntry, fromIndex = 0x7fffffff): number {
     return this.entries.lastIndexOf(searchEntry, fromIndex);
   }
 
+  /** @see ITimeSignatureMap.pop */
   pop(): ITimeSignatureEntry | undefined {
     const entry = this.entries[this.entries.length - 1];
     if (entry) {
@@ -80,6 +89,7 @@ export class TimeSignatureMap implements ITimeSignatureMap {
     return this.entries.pop();
   }
 
+  /** @see ITimeSignatureMap.push */
   push(...entries: ITimeSignatureEntry[]): number {
     for (const entry of entries) {
       this.addDurationOf(entry);
@@ -87,6 +97,7 @@ export class TimeSignatureMap implements ITimeSignatureMap {
     return this.entries.push(...entries);
   }
 
+  /** @see ITimeSignatureMap.removeAt */
   removeAt(index: number): ITimeSignatureEntry {
     const entry = this.entries[index] as ITimeSignatureEntry;
     this.removeDurationOf(entry);
@@ -94,10 +105,12 @@ export class TimeSignatureMap implements ITimeSignatureMap {
     return entry;
   }
 
+  /** @see ITimeSignatureMap.reverse */
   reverse(): void {
     this.entries.reverse();
   }
 
+  /** @see ITimeSignatureMap.shift */
   shift(): ITimeSignatureEntry | undefined {
     const entry = this.entries[0];
     if (entry) {
@@ -106,14 +119,17 @@ export class TimeSignatureMap implements ITimeSignatureMap {
     return this.entries.shift();
   }
 
+  /** @see ITimeSignatureMap.some */
   some(callback: TimeSignatureMapCallback<boolean>): boolean {
     return this.entries.some((entry, index) => callback(entry, index, this));
   }
 
+  /** @see ITimeSignatureMap.sort */
   sort(compareFn?: (a: ITimeSignatureEntry, b: ITimeSignatureEntry) => number): void {
     this.entries.sort(compareFn);
   }
 
+  /** @see ITimeSignatureMap.splice */
   splice(startIndex: number, deleteCount = 0xffffffff, ...entries: ITimeSignatureEntry[]): void {
     if (deleteCount > 0) {
       const entriesToDelete = this.entries.slice(startIndex, startIndex + deleteCount);
@@ -129,10 +145,12 @@ export class TimeSignatureMap implements ITimeSignatureMap {
     this.entries.splice(startIndex, deleteCount, ...entries);
   }
 
+  /** @see ITimeSignatureMap.toString */
   toString(): string {
     return this.entries.toString();
   }
 
+  /** @see ITimeSignatureMap.unshift */
   unshift(...entries: ITimeSignatureEntry[]): number {
     for (const entry of entries) {
       this.addDurationOf(entry);

@@ -20,6 +20,10 @@ export class IntervalRegistryEntry {
   private readonly sizeValue: number;
   private readonly rootValue: number;
 
+  /**
+   * @param low The lower (bass) MIDI pitch of the interval.
+   * @param size The interval's size, in semitones.
+   */
   constructor(low: number, size: number) {
     this.lowValue = low;
     this.sizeValue = size;
@@ -32,18 +36,26 @@ export class IntervalRegistryEntry {
           : Number.MAX_SAFE_INTEGER;
   }
 
+  /** The lower (bass) MIDI pitch of the interval, as given to the constructor. */
   get low(): number {
     return this.lowValue;
   }
 
+  /** The interval's size, in semitones, as given to the constructor. */
   get size(): number {
     return this.sizeValue;
   }
 
+  /**
+   * The MIDI pitch Hindemith considers this interval's harmonic root: `low` or `low + size`,
+   * whichever `getHindemithsIntervalRoot(size)` designates, or `Number.MAX_SAFE_INTEGER` if the
+   * interval's root position is undetermined.
+   */
   get root(): number {
     return this.rootValue;
   }
 
+  /** @see Object.prototype.toString */
   toString(): string {
     return `Interval Registry Entry: low=${this.lowValue} | size=${this.sizeValue} | root=${this.rootValue}`;
   }

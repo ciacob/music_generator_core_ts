@@ -13,6 +13,7 @@ import { toAS3ConstantCase } from '../../../utils/Strings.js';
 
 const PIANO_VOICES = ['R.H.', 'L.H.'] as const;
 
+/** Abbreviated voice names for each supported instrument/ensemble part, keyed by part name. */
 export const PartAbbreviatedVoiceNames = {
   // Piano
   PIANO: PIANO_VOICES,

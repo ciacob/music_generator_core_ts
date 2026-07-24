@@ -37,6 +37,10 @@ export class WeightedRandomPicker {
   private rafflePool: unknown[] = [];
   private numDrawings = 1;
 
+  /**
+   * @param randomFn Seedable source of randomness for pool shuffling. Defaults to `Math.random`.
+   * @see this file's own doc comment for why shuffling and index-picking need separate seeding.
+   */
   constructor(private readonly randomFn: () => number = Math.random) {}
 
   /** Applies a configuration, immediately (re)building the raffle pool. */
@@ -69,6 +73,7 @@ export class WeightedRandomPicker {
     return ret;
   }
 
+  /** Whether the drawable pool has run out (always `false` if duplicate picks are permitted). */
   get exhausted(): boolean {
     if (this.areDuplicatesPermitted) {
       return false;

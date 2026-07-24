@@ -10,6 +10,10 @@ import {
  * referenced anywhere else.
  */
 class Entry {
+  /**
+   * @param source The candidate value to potentially pick.
+   * @param weight The candidate's (possibly negative) selection weight.
+   */
   constructor(
     public readonly source: unknown,
     public weight: number,
@@ -132,10 +136,12 @@ export class WRPickerConfig {
     return true;
   }
 
+  /** How many elements a single `pick()` call draws. @see $setNumPicks */
   get numPicks(): number {
     return this.numPicksValue;
   }
 
+  /** Whether picks exhaust the pool (no duplicate picks) or not. @see $setExhaustible */
   get exhaustible(): boolean {
     return this.exhaustibleFlag;
   }
@@ -153,6 +159,7 @@ export class WRPickerConfig {
     return this.normalizedListCache;
   }
 
+  /** The custom random-integer source configured via `$setRandomIntegerFunction`, if any. */
   get randomIntegerFunction(): RandomIntegerFunction | undefined {
     return this.randomIntegerFunctionValue;
   }

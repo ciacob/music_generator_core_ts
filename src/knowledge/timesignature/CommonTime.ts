@@ -16,6 +16,7 @@ export class CommonTime extends AbstractTimeSignatureDefinition implements ITime
   private junctionsCache: IFraction[] | null = null;
   private metricAccentsCache: IMetricAccent[] | null = null;
 
+  /** @see ITimeSignatureDefinition.fraction */
   override get fraction(): IFraction {
     if (!this.fractionCache) {
       this.fractionCache = new Fraction(1);
@@ -23,6 +24,7 @@ export class CommonTime extends AbstractTimeSignatureDefinition implements ITime
     return this.fractionCache;
   }
 
+  /** @see ITimeSignatureDefinition.junctions */
   override get junctions(): IFraction[] {
     if (!this.junctionsCache) {
       this.junctionsCache = [new Fraction(3, 4)];
@@ -30,6 +32,7 @@ export class CommonTime extends AbstractTimeSignatureDefinition implements ITime
     return this.junctionsCache;
   }
 
+  /** @see ITimeSignatureDefinition.metricAccents */
   override get metricAccents(): IMetricAccent[] {
     if (!this.metricAccentsCache) {
       const primaryAccent = new MetricAccent(1, new Fraction(1, 4));
@@ -39,10 +42,12 @@ export class CommonTime extends AbstractTimeSignatureDefinition implements ITime
     return this.metricAccentsCache;
   }
 
+  /** @see ITimeSignatureDefinition.shownDenominator */
   override get shownDenominator(): number {
     return 4;
   }
 
+  /** @see ITimeSignatureDefinition.shownNumerator */
   override get shownNumerator(): number {
     return 4;
   }
