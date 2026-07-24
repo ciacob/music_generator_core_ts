@@ -4,14 +4,11 @@ Node.js / TypeScript port of the ActionScript 3 stochastic music generation
 engine, translated package by package from the original AS3 reference
 snapshot.
 
-See the top-level `README.md` in the parent `music-generation-engine-ts/`
-folder (sibling `as-sources/` directory) for:
-
-- the full package map (which original library each part came from),
-- the AS3 → TypeScript translation gotchas table,
-- the suggested translation order and project layout,
-- the minimal fixture / first integration-test target,
-- licensing notes (still unresolved — see that document before publishing).
+The full package map, AS3 → TypeScript translation notes, and licensing
+status live in a top-level `README.md` that is **not part of this
+repository** — it's reference material handed off directly between whoever
+works on this project, not published here. See `ONBOARDING.md` in this repo
+for what that document is and how to get it if you don't already have it.
 
 ## Status
 
